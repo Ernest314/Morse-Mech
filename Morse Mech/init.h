@@ -40,8 +40,23 @@
 // PD6 - (O) LED_indicator_G
 // PD7 - (O) LED_indicator_B
 
-#define SW_KEY_PINX  PIND
-#define SW_KEY_PINXN PIND0
+// TODO: Should these be #defines or constants?
+// Is there even a good way to have them be constants?
+// TODO: Better naming...
+#define SW_KEY_PIN		PIND
+#define SW_KEY_PINN		PIND0
+
+// TODO: separate #defines for R/G/B(?)
+#define LED_IND_PORT	PORTD
+#define LED_IND_PORTR	PORTD5
+#define LED_IND_PORTG	PORTD6
+#define LED_IND_PORTB	PORTD7
+
+#define LED_SW_PORT		PORTB
+#define LED_SW_PORTR	PORTB4
+#define LED_SW_PORTG	PORTB5
+#define LED_SW_PORTB	PORTB6
+
 
 void init();
 
