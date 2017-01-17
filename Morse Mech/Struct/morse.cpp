@@ -20,15 +20,12 @@ KeyCombo popScancode(volatile queue<MorseBit>& data) {
 		}
 		data.pop();
 	}
-	// TODO: It would take more time but less space to encode with
-	// alternating bits. e.g. 1100100101101...
-	// It might even be better to place this into the queue directly.
+	// TODO: It might even be better to place this into the queue directly.
 	
 	// 0 = padding, 1 = start, 0 = dot, 1 = dash
 	uint8_t scancode = HID_KEYBOARD_SC_ERROR_UNDEFINED;
 	uint8_t modifier = HID_KEYBOARD_MODIFIER_NONE;
 	MorseStatus status = MorseStatus::None;
-	// TODO: Error if default case?
 	switch (buffer) {
 		// Letters
 		// NOTE: All characters are in upper-case by design!
@@ -96,6 +93,8 @@ KeyCombo popScancode(volatile queue<MorseBit>& data) {
 		case 0b0000110001 : status = MorseStatus::Section;	break;			// <BT>: new paragraph (CR-LF-LF)
 		case 0b0000101000 : status = MorseStatus::Wait;		break;			// <AS>: wait
 		case 0b1000111000 : status = MorseStatus::Reset;	break;			// <SOS>: reset device
+		
+		default : status = MorseStatus::Error; break;
 	}
 	return KeyCombo(scancode, modifier, status);
 }

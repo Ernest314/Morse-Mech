@@ -2,6 +2,7 @@
 #define _MORSESTATUS_H_
 
 enum class MorseStatus {
+	Error	= -1,
 	Unknown	= 0,
 	None	= 1,
 	Reset	= 2,

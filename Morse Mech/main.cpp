@@ -100,11 +100,31 @@ void push_Morse(bool was_closed, uint64_t code_len) {
 			queue_input.push(MorseBit::Dash);
 		}
 	} else {
-		if (code_len > threshold_3u_lower && code_len < threshold_7u_lower) {
+		if (code_len > threshold_3u_lower) {
+			KeyCombo keycombo = popScancode(queue_input);
+			switch (keycombo.status) {
+			case MorseStatus::Unknown :
+			default :
+				// TODO: do something? maybe different things?
+			case MorseStatus::Error :
+				break;
+			case MorseStatus::None :
+				queue_keycombos.push(keycombo);
+				break;
+			case MorseStatus::Reset :
+				// TODO: reset chip... trip watchdog?
+				break;
+			case MorseStatus::Wait :
+				// TODO: should something be done for this status?
+				break;
+			case MorseStatus::Section :
+				queue_keycombos.push(KeyCombo(HID_KEYBOARD_SC_ENTER));
+				queue_keycombos.push(KeyCombo(HID_KEYBOARD_SC_ENTER));
+				break;
+			}
 			queue_keycombos.push(popScancode(queue_input));
 		}
 		if (code_len >= threshold_7u_lower) {
-			queue_keycombos.push(popScancode(queue_input));
 			queue_keycombos.push(KeyCombo(HID_KEYBOARD_SC_SPACE));
 		}
 	}
