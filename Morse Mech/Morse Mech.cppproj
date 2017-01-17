@@ -572,6 +572,12 @@
     <Compile Include="init.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Struct\color.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Struct\color.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Struct\keycombo.h">
       <SubType>compile</SubType>
     </Compile>
