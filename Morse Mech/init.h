@@ -40,23 +40,26 @@
 // PD6 - (O) LED_indicator_G
 // PD7 - (O) LED_indicator_B
 
+// TODO: pull up all unused inputs?
+
 // TODO: Should these be #defines or constants?
 // Is there even a good way to have them be constants?
-// TODO: Better naming...
 #define SW_KEY_PIN		PIND
-#define SW_KEY_PINN		PIND0
+#define SW_KEY_MASK		PIND0
 
-// TODO: separate #defines for R/G/B(?)
-#define LED_IND_PORT	PORTD
-#define LED_IND_PORTR	PORTD5
-#define LED_IND_PORTG	PORTD6
-#define LED_IND_PORTB	PORTD7
+#define LED_IND_PORT_R	PORTD
+#define LED_IND_PORT_G	PORTD
+#define LED_IND_PORT_B	PORTD
+#define LED_IND_MASK_R	PORTD5
+#define LED_IND_MASK_G	PORTD6
+#define LED_IND_MASK_B	PORTD7
 
-#define LED_SW_PORT		PORTB
-#define LED_SW_PORTR	PORTB4
-#define LED_SW_PORTG	PORTB5
-#define LED_SW_PORTB	PORTB6
-
+#define LED_SW_PORT_R	PORTB
+#define LED_SW_PORT_G	PORTB
+#define LED_SW_PORT_B	PORTB
+#define LED_SW_MASK_R	PORTB4
+#define LED_SW_MASK_G	PORTB5
+#define LED_SW_MASK_B	PORTB6
 
 void init();
 
