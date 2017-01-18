@@ -51,9 +51,11 @@ volatile queue<KeyCombo> queue_keycombos =
 	queue<KeyCombo>(queue_keycombos_mem, queue_keycombos_len);
 
 enum class Mode {
-	Mode_Suspend = 0,
-	Mode_Active = 1
+	Suspend = 0,
+	Active = 1
 };
+
+Mode mode_sys = Mode::Suspend;
 
 void push_Morse(bool was_closed, uint64_t code_len);
 
@@ -74,10 +76,15 @@ int main()
 	// TODO: turn on caps lock (only send scancode once)
 	
 	Switch switch_key(&SW_KEY_PINX, SW_KEY_PINXN);
+	// Initialize devices and closely-related variables
 	Timer timer_switch;
 	
     while (true) {
 		switch_key.update();
+		
+		if (mode_sys == Mode::Suspend) {
+			
+		}
 		
 		if (switch_key.is_closed() != switch_key.is_closed_prev()) {
 			timer_switch.set_begin();
@@ -116,6 +123,9 @@ void push_Morse(bool was_closed, uint64_t code_len) {
 				break;
 			case MorseStatus::Wait :
 				// TODO: should something be done for this status?
+				break;
+			case MorseStatus::Sleep :
+				mode_sys = Mode::Suspend;
 				break;
 			case MorseStatus::Section :
 				queue_keycombos.push(KeyCombo(HID_KEYBOARD_SC_ENTER));
