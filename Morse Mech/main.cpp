@@ -21,6 +21,7 @@
 #include "Data/vector.h"
 #include "Devices/timer.h"
 #include "Devices/switch.h"
+#include "Devices/led.h"
 #include "Struct/keycombo.h"
 #include "Struct/morse.h"
 

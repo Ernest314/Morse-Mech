@@ -212,6 +212,12 @@
     <Compile Include="descriptors.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Devices\led.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Devices\led.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Devices\switch.cpp">
       <SubType>compile</SubType>
     </Compile>
