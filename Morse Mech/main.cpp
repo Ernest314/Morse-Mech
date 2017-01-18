@@ -81,7 +81,6 @@ int main()
 	//Mode mode_sys = Mode_Suspend;
 	// TODO: turn on caps lock (only send scancode once)
 	
-	Switch switch_key(&SW_KEY_PINX, SW_KEY_PINXN);
 	// Initialize devices and closely-related variables
 	Timer timer_switch;
 	Switch switch_key(&SW_KEY_PIN, SW_KEY_MASK);
