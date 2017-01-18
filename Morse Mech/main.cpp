@@ -9,8 +9,8 @@
 #include <avr/wdt.h>
 #include <util/atomic.h>
 #include <util/delay.h>
-// No TWI on the ATmega16u2 :(
-// ATmega32u4 does seem to have it though--cost issue?
+// No TWI on the ATmega[8|16|32]u2 :(
+// ATmega[16|32]u4 does seem to have it though--cost issue?
 
 #include "LUFA/Drivers/USB/USB.h"
 #include "LUFA/Platform/Platform.h"
