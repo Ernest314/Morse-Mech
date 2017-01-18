@@ -91,6 +91,7 @@ KeyCombo popScancode(volatile queue<MorseBit>& data) {
 		case 0b0001100111 : scancode = HID_KEYBOARD_SC_CAPS_LOCK;	break;	// <NJ>: shift to Wabun code
 		case 0b0100000000 : scancode = HID_KEYBOARD_SC_BACKSPACE;	break;	// <HH>: error
 		case 0b0000110001 : status = MorseStatus::Section;	break;			// <BT>: new paragraph (CR-LF-LF)
+		case 0b0001000101 : status = MorseStatus::Sleep;	break;			// <SK>: silence key
 		case 0b0000101000 : status = MorseStatus::Wait;		break;			// <AS>: wait
 		case 0b1000111000 : status = MorseStatus::Reset;	break;			// <SOS>: reset device
 		

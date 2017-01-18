@@ -7,7 +7,8 @@ enum class MorseStatus {
 	None	= 1,
 	Reset	= 2,
 	Wait	= 3,
-	Section	= 4
+	Sleep	= 4,
+	Section	= 5
 };
 
 #endif	// _MORSESTATUS_H_

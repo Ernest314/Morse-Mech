@@ -1,6 +1,4 @@
-#include <math.h>
-#include <stdint.h>
-#include <stdio.h>
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -59,9 +57,11 @@ volatile Color color_indicator();
 volatile Color color_backlight();
 
 enum class Mode {
-	Mode_Suspend = 0,
-	Mode_Active = 1
+	Suspend = 0,
+	Active = 1
 };
+
+Mode mode_sys = Mode::Suspend;
 
 void push_Morse(bool was_closed, uint64_t code_len);
 
@@ -81,6 +81,7 @@ int main()
 	//Mode mode_sys = Mode_Suspend;
 	// TODO: turn on caps lock (only send scancode once)
 	
+	Switch switch_key(&SW_KEY_PINX, SW_KEY_PINXN);
 	// Initialize devices and closely-related variables
 	Timer timer_switch;
 	Switch switch_key(&SW_KEY_PIN, SW_KEY_MASK);
@@ -97,6 +98,10 @@ int main()
 	
     while (true) {
 		switch_key.update();
+		
+		if (mode_sys == Mode::Suspend) {
+			
+		}
 		
 		if (switch_key.is_closed() != switch_key.is_closed_prev()) {
 			timer_switch.set_begin();
@@ -139,6 +144,9 @@ void push_Morse(bool was_closed, uint64_t code_len) {
 				break;
 			case MorseStatus::Wait :
 				// TODO: should something be done for this status?
+				break;
+			case MorseStatus::Sleep :
+				mode_sys = Mode::Suspend;
 				break;
 			case MorseStatus::Section :
 				queue_keycombos.push(KeyCombo(HID_KEYBOARD_SC_ENTER));
