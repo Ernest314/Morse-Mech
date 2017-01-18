@@ -21,8 +21,11 @@
 #include "Data/vector.h"
 #include "Devices/timer.h"
 #include "Devices/switch.h"
+#include "Devices/led.h"
+#include "Devices/rgb_led.h"
 #include "Struct/keycombo.h"
 #include "Struct/morse.h"
+#include "Struct/color.h"
 
 #include "init.h"
 
@@ -30,6 +33,8 @@
 #include "globals.h"
 #include "descriptors.h"
 #include "HID.h"
+
+// TODO: Actually set F_USB correctly (current placeholder is 16 MHz)
 
 static uint8_t PrevKeyboardHIDReportBuffer[sizeof(USB_KeyboardReport_Data_t)];
 
@@ -49,6 +54,9 @@ volatile queue<MorseBit> queue_input =
 	queue<MorseBit>(queue_input_mem, queue_input_len);
 volatile queue<KeyCombo> queue_keycombos =
 	queue<KeyCombo>(queue_keycombos_mem, queue_keycombos_len);
+	
+volatile Color color_indicator();
+volatile Color color_backlight();
 
 enum class Mode {
 	Mode_Suspend = 0,
@@ -73,8 +81,19 @@ int main()
 	//Mode mode_sys = Mode_Suspend;
 	// TODO: turn on caps lock (only send scancode once)
 	
-	Switch switch_key(&SW_KEY_PINX, SW_KEY_PINXN);
+	// Initialize devices and closely-related variables
 	Timer timer_switch;
+	Switch switch_key(&SW_KEY_PIN, SW_KEY_MASK);
+	
+	uint16_t counter_LED = 0;
+	RGB_LED LED_indicator(
+		LED(&LED_IND_PORT_R, LED_IND_MASK_R),
+		LED(&LED_IND_PORT_G, LED_IND_MASK_G),
+		LED(&LED_IND_PORT_B, LED_IND_MASK_B) );
+	RGB_LED LED_backlight(
+		LED(&LED_SW_PORT_R, LED_SW_MASK_R),
+		LED(&LED_SW_PORT_G, LED_SW_MASK_G),
+		LED(&LED_SW_PORT_B, LED_SW_MASK_B) );
 	
     while (true) {
 		switch_key.update();
@@ -86,6 +105,10 @@ int main()
 			uint64_t code_len = timer_switch.get_count();
 			push_Morse(was_closed, code_len);
 		}
+		
+		counter_LED++;	// TODO: does this overflow correctly?
+		LED_indicator.updateLEDs(counter_LED);
+		LED_backlight.updateLEDs(counter_LED);
 		
 		HID_Device_USBTask(&Keyboard_HID_Interface);
 		USB_USBTask();
@@ -100,11 +123,31 @@ void push_Morse(bool was_closed, uint64_t code_len) {
 			queue_input.push(MorseBit::Dash);
 		}
 	} else {
-		if (code_len > threshold_3u_lower && code_len < threshold_7u_lower) {
+		if (code_len > threshold_3u_lower) {
+			KeyCombo keycombo = popScancode(queue_input);
+			switch (keycombo.status) {
+			case MorseStatus::Unknown :
+			default :
+				// TODO: do something? maybe different things?
+			case MorseStatus::Error :
+				break;
+			case MorseStatus::None :
+				queue_keycombos.push(keycombo);
+				break;
+			case MorseStatus::Reset :
+				// TODO: reset chip... trip watchdog?
+				break;
+			case MorseStatus::Wait :
+				// TODO: should something be done for this status?
+				break;
+			case MorseStatus::Section :
+				queue_keycombos.push(KeyCombo(HID_KEYBOARD_SC_ENTER));
+				queue_keycombos.push(KeyCombo(HID_KEYBOARD_SC_ENTER));
+				break;
+			}
 			queue_keycombos.push(popScancode(queue_input));
 		}
 		if (code_len >= threshold_7u_lower) {
-			queue_keycombos.push(popScancode(queue_input));
 			queue_keycombos.push(KeyCombo(HID_KEYBOARD_SC_SPACE));
 		}
 	}

@@ -212,6 +212,18 @@
     <Compile Include="descriptors.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Devices\led.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Devices\led.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Devices\rgb_led.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Devices\rgb_led.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Devices\switch.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -570,6 +582,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="init.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Struct\color.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Struct\color.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Struct\keycombo.h">
