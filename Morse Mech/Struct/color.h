@@ -7,7 +7,7 @@
 class Color {
 public:
 	// TODO: turn this into a static lookup table(?)
-	// (Is there enough space?)
+	// (Is there enough space?)--look into PROGMEM
 	static constexpr float gamma = 2.8;
 	
 private:
